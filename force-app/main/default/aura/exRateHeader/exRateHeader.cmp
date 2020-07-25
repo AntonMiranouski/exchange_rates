@@ -1,0 +1,35 @@
+<aura:component implements="force:appHostable" controller="ExRatesController">
+  <aura:attribute name="exRates" type="Exchange_Rate__c[]" />
+  <aura:attribute name="picklistValues" type="Object" />
+  <aura:attribute name="columns" type="List" />
+
+  <c:PickListValues sObjectName="Exchange_Rate__c" fieldName="BaseCurrency__c" picklistValues="{!v.picklistValues}" />
+
+  <lightning:layout>
+    <lightning:layoutItem class="menu" flexibility="auto" padding="around-small">
+      <lightning:select aura:id="sc" name="select" label="Base Currency">
+        <option value="" text="Please select a currency"> </option>
+        <aura:iteration items="{!v.picklistValues}" var="curr">
+          <option value="{!curr}">{!curr}</option>
+        </aura:iteration>
+      </lightning:select>
+    </lightning:layoutItem>
+    <lightning:layoutItem class="menu" flexibility="auto" padding="around-small">
+      <lightning:input type="date" aura:id="singleDay" format="YYYY-MM-DD" label="Exchange Rates for Day" />
+      <br />
+      <lightning:button variant="success" label="Submit" onclick="{!c.handleSubmit}" />
+    </lightning:layoutItem>
+    <lightning:layoutItem class="menu" flexibility="auto" padding="around-small">
+      <lightning:input type="date" aura:id="startDate" format="YYYY-MM-DD" label="Exchange Rates for Period" />
+      <lightning:input type="date" aura:id="endDate" format="YYYY-MM-DD" />
+      <br />
+      <lightning:button variant="success" label="Submit" onclick="{!c.doInit}" />
+    </lightning:layoutItem>
+  </lightning:layout>
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <lightning:layoutItem padding="around-small">
+    <lightning:datatable class="slds-text-align_right" data="{!v.exRates}" columns="{!v.columns}" keyField="Id" hideCheckboxColumn="true" />
+  </lightning:layoutItem>
+</aura:component>
